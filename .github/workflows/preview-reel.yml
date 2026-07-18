@@ -1,0 +1,54 @@
+name: Preview Reel (No Publish)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install ffmpeg and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Generate reel script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-reel-script.js
+
+      - name: Generate voiceover
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+        run: node scripts/generate-voiceover.js
+
+      - name: Generate AI scene images
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/generate-scene-images.js
+
+      - name: Assemble reel video
+        run: node scripts/generate-reel-video.js
+
+      - name: Commit preview assets to repo (no Instagram publish)
+        run: |
+          git config user.name "ig-automation-bot"
+          git config user.email "actions@github.com"
+          git add assets/ state/
+          git commit -m "Preview: reel content for chat review [skip ci]" || echo "Nothing to commit"
+          git push

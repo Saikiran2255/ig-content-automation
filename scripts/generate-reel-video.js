@@ -33,7 +33,14 @@ async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
   const duration = getAudioDuration(audioPath);
-  const perScene = duration / scenes.length;
+
+  // Time each scene proportionally to its narration chunk's word count,
+  // so visuals actually change roughly in sync with what's being said,
+  // rather than dividing the video into equal-length blind segments.
+  const wordCounts = scenes.map((s) => (s.narrationChunk || "").trim().split(/\s+/).filter(Boolean).length || 1);
+  const totalWords = wordCounts.reduce((a, b) => a + b, 0) || scenes.length;
+  const sceneDurations = wordCounts.map((wc) => (wc / totalWords) * duration);
+
   const fontfile = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf";
 
   const preparedPaths = [];
@@ -47,7 +54,8 @@ async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
   const fps = 30;
   for (let i = 0; i < scenes.length; i++) {
     const clipPath = path.join(tmpDir, `clip-${i}.mp4`);
-    const frames = Math.round(perScene * fps);
+    const thisDuration = sceneDurations[i];
+    const frames = Math.round(thisDuration * fps);
     const zoomExpr =
       i % 2 === 0 ? "zoom+0.0015" : "if(eq(on,0),1.15,max(1.0,zoom-0.0015))";
 
@@ -58,7 +66,7 @@ async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
       "ffmpeg -y",
       `-loop 1 -i "${preparedPaths[i]}"`,
       `-vf "scale=1350:2400,zoompan=z='${zoomExpr}':d=${frames}:s=1080x1920:fps=${fps},${drawtext}"`,
-      `-t ${perScene.toFixed(2)}`,
+      `-t ${thisDuration.toFixed(2)}`,
       "-c:v libx264 -pix_fmt yuv420p",
       `"${clipPath}"`,
     ].join(" ");
@@ -79,8 +87,7 @@ async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
     let lastLabel = "0:v";
     let cumulativeOffset = 0;
     for (let i = 1; i < clipPaths.length; i++) {
-      const clipDuration = perScene;
-      cumulativeOffset += clipDuration - transitionDuration;
+      cumulativeOffset += sceneDurations[i - 1] - transitionDuration;
       const outLabel = i === clipPaths.length - 1 ? "outv" : `v${i}`;
       filterChain += `[${lastLabel}][${i}:v]xfade=transition=fade:duration=${transitionDuration}:offset=${cumulativeOffset.toFixed(
         2
@@ -116,6 +123,7 @@ if (require.main === module) {
 
   const scenes = script.scenes.map((s, i) => ({
     caption: s.caption,
+    narrationChunk: s.narration_chunk,
     imagePath: path.join(scenesDir, `scene-${i + 1}.png`),
   }));
 
