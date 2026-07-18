@@ -1,11 +1,7 @@
 name: Auto Post Reel to Instagram
 
 on:
-  schedule:
-    # Once a week: Thursday at 19:00 IST (13:30 UTC) - starting conservatively
-    # since Reels are the most resource/cost-intensive format
-    - cron: "30 13 * * 4"
-  workflow_dispatch: {}
+  workflow_dispatch: {} # Reels paused - schedule disabled. Trigger manually if revisiting.
 
 permissions:
   contents: write
