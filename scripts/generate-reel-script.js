@@ -57,7 +57,13 @@ async function generateReelScript() {
   const prompt = `You are writing content for a 35-45 second medical education Instagram Reel, for a doctor's personal account. Topic: "${topic}"${guidanceLine}
 
 Write:
-1. A narration script (90-130 words) meant to be SPOKEN aloud - natural spoken rhythm, short sentences, a strong hook in the first line (first 2 seconds matter most for retention), simple language explaining the topic clearly, ending with a memorable closing line. Do not include stage directions, just the words to be spoken.
+1. A narration script (90-130 words) meant to be SPOKEN aloud - natural spoken rhythm, short sentences, simple language explaining the topic clearly, ending with a memorable closing line. Do not include stage directions, just the words to be spoken.
+
+   THE FIRST LINE IS CRITICAL - it must be a scroll-stopping hook, not a gentle intro. Use one of these patterns:
+   - A surprising/counter-intuitive claim ("Your brain eats itself every single night.")
+   - A direct question that creates a knowledge gap ("Why does your heart never get tired?")
+   - A bold statement that challenges assumption ("Everything you know about cholesterol is wrong.")
+   Avoid soft openers like "Did you know" or "Let's talk about" - open with the hook itself, immediately, no preamble.
 2. 5 scenes that divide the narration into a visual sequence. For each scene provide:
    - "caption": a short on-screen text phrase (max 6 words) - the key phrase/punchline for that moment
    - "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a clean, professional medical illustration for this scene (e.g. anatomical diagram style, clean flat illustration, soft color palette, no text in the image, no gore, educational and reassuring tone, suitable for a general audience)
