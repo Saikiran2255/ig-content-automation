@@ -1,0 +1,25 @@
+{
+  "name": "ig-content-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Saikiran2255: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@github.com/Saikiran2255/ig-content-automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Saikiran2255/ig-content-automation/issues"
+  },
+  "homepage": "https://github.com/Saikiran2255/ig-content-automation#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.112.3",
+    "node-fetch": "^2.7.0",
+    "sharp": "^0.35.3"
+  }
+}
