@@ -1,0 +1,44 @@
+name: Weekly Strategy Update
+
+on:
+  schedule:
+    # Every Sunday at 09:00 IST (03:30 UTC)
+    - cron: "30 3 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-strategy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Fetch Instagram Insights for recent posts
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: node scripts/fetch-insights.js
+
+      - name: Analyze performance and update strategy
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/analyze-strategy.js
+
+      - name: Commit updated strategy
+        run: |
+          git config user.name "ig-automation-bot"
+          git config user.email "actions@github.com"
+          git add state/
+          git commit -m "Auto: weekly strategy update based on post performance [skip ci]" || echo "Nothing to commit"
+          git push

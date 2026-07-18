@@ -69,6 +69,20 @@ async function main() {
 
   const publishedId = await publishMedia(containerId);
   console.log("Published successfully. Media ID:", publishedId);
+
+  // Log this post for the weekly analytics/strategy loop
+  const historyPath = path.join(__dirname, "..", "state", "post-history.json");
+  let history = [];
+  if (fs.existsSync(historyPath)) {
+    history = JSON.parse(fs.readFileSync(historyPath, "utf-8"));
+  }
+  history.push({
+    mediaId: publishedId,
+    topic: content.topic,
+    headline: content.headline,
+    publishedAt: new Date().toISOString(),
+  });
+  fs.writeFileSync(historyPath, JSON.stringify(history, null, 2));
 }
 
 if (require.main === module) {
