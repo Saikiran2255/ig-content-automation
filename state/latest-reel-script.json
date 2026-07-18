@@ -1,6 +1,27 @@
 {
-  "topic": "Why do we need to sleep? What happens in your brain",
-  "narration": "Every night, your brain does something no machine can replicate. While you sleep, it flushes out toxic proteins that build up during the day, ones linked to memory loss and disease. It replays your day's memories, deciding what to keep and what to let go. Your immune system ramps up, repairing tissue and fighting infection. Skip sleep, and none of this happens properly. That's not laziness catching up with you, that's your brain literally not getting the maintenance it needs to function. Sleep isn't rest. It's repair.",
-  "on_screen_captions": ["Your brain cleans itself", "Toxic proteins flushed out", "Memories sorted and saved", "Immune system repairs", "Sleep isn't rest, it's repair"],
-  "caption": "We treat sleep like a luxury we can skip. But your brain treats it like maintenance it can't skip.\n\nEvery night your brain clears out waste proteins, consolidates memories, and repairs your immune system. Chronic sleep loss doesn't just make you tired, it interferes with all three.\n\nSwipe through, save this, and protect your 7-8 hours like the medical necessity it is.\n\n#sleepscience #medicaleducation #healtheducation #doctoradvice #sleephealth"
+  "topic": "How kidney stones form and why they hurt so much",
+  "narration": "Kidney stones hurt more than childbirth for some people. But why? It starts when minerals in your urine get too concentrated. Think of it like sugar crystallizing in a supersaturated solution. These crystals stick together, forming stones that can grow from a grain of sand to the size of a golf ball. The pain happens when these stones start moving through your ureter, the narrow tube connecting your kidney to your bladder. It's only three millimeters wide. The stone gets stuck, causing intense cramping and stretching. Your body tries to push it through with powerful muscle contractions. That's why the pain comes in waves. Small stones pass on their own, but larger ones may need intervention. Stay hydrated to keep those minerals diluted.",
+  "scenes": [
+    {
+      "caption": "Worse than childbirth sometimes",
+      "image_prompt": "Clean medical illustration of a person's silhouette clutching their lower back in discomfort, soft blue and coral color palette, minimalist anatomical style showing kidney location highlighted, professional educational diagram with gentle reassuring aesthetic, side view"
+    },
+    {
+      "caption": "Minerals crystallize in your urine",
+      "image_prompt": "Microscopic view illustration of calcium oxalate crystals forming in yellow-tinted liquid, geometric crystal shapes in warm orange and amber tones, clean scientific diagram style, educational medical illustration showing crystallization process, no gore"
+    },
+    {
+      "caption": "Stones grow from sand to golf ball",
+      "image_prompt": "Size comparison medical illustration showing kidney stones in progressive sizes from tiny grain to large sphere, arranged in ascending order, soft neutral background, clean flat design, beige and earth tone palette, professional anatomical educational style"
+    },
+    {
+      "caption": "Stuck in a 3mm tube",
+      "image_prompt": "Anatomical cross-section illustration of ureter tube with kidney stone lodged inside, soft pink and coral colors, clean medical diagram showing ureter walls stretching around stone, educational style with clear anatomical detail, gentle color palette"
+    },
+    {
+      "caption": "Pain comes in waves",
+      "image_prompt": "Abstract medical illustration showing wave pattern overlaid on kidney and ureter anatomy, rhythmic curved lines in blue and red indicating muscle contractions, clean modern design, educational diagram style, soft professional color scheme"
+    }
+  ],
+  "caption": "Ever wondered why kidney stones are considered one of the most painful experiences? 😰\n\nIt's all about location and size mismatch. When minerals in your urine become too concentrated, they crystallize and form stones. The real problem? These stones have to pass through your ureter—a tube that's only 3mm wide.\n\nAs your body tries to push the stone through with powerful muscle contractions, you experience intense, wave-like pain. The good news? Most small stones pass naturally with proper hydration.\n\nPrevention tip: Drink plenty of water throughout the day to keep those minerals diluted! 💧\n\nQuestions? Drop them below! 👇\n\n#KidneyStones #MedicalEducation #DoctorTok #HealthTips #Urology"
 }
