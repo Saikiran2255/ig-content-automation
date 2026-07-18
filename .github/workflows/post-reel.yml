@@ -1,0 +1,79 @@
+name: Auto Post Reel to Instagram
+
+on:
+  schedule:
+    # Once a week: Thursday at 19:00 IST (13:30 UTC) - starting conservatively
+    # since Reels are the most resource/cost-intensive format
+    - cron: "30 13 * * 4"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-post-reel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Confirm ffmpeg + fonts available
+        run: |
+          ffmpeg -version
+          fc-list | grep -i dejavu || sudo apt-get update && sudo apt-get install -y fonts-dejavu-core
+
+      - name: Generate reel script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-reel-script.js
+
+      - name: Generate voiceover
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+        run: node scripts/generate-voiceover.js
+
+      - name: Assemble reel video
+        run: node scripts/generate-reel-video.js
+
+      - name: Commit generated assets to repo
+        run: |
+          git config user.name "ig-automation-bot"
+          git config user.email "actions@github.com"
+          git add assets/ state/
+          git commit -m "Auto: new reel script, voiceover, and video [skip ci]" || echo "Nothing to commit"
+          git push
+
+      - name: Build jsDelivr URL for video
+        run: |
+          VIDEO_PATH=$(cat state/latest-reel-video-path.txt)
+          RAW_URL="https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/${VIDEO_PATH}"
+          echo "$RAW_URL" > state/reel-video-url.txt
+          echo "Video will be published from: $RAW_URL"
+
+      - name: Warm up jsDelivr cache
+        run: |
+          VIDEO_URL=$(cat state/reel-video-url.txt)
+          for i in 1 2 3 4 5 6; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$VIDEO_URL")
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Video is live on jsDelivr."
+              break
+            fi
+            sleep 15
+          done
+
+      - name: Publish reel to Instagram
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: node scripts/publish-reel.js

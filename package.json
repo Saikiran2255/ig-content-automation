@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Saikiran2255/ig-content-automation#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.3",
+    "fluent-ffmpeg": "^2.1.3",
     "node-fetch": "^2.7.0",
     "sharp": "^0.35.3"
   }
