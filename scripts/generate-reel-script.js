@@ -57,13 +57,18 @@ async function generateReelScript() {
   const prompt = `You are writing content for a 35-45 second medical education Instagram Reel, for a doctor's personal account. Topic: "${topic}"${guidanceLine}
 
 Write:
-1. A narration script (90-130 words) meant to be SPOKEN ALOUD with genuine enthusiasm and energy - like an excited doctor sharing a fascinating fact with a friend, not reading a textbook. Natural spoken rhythm, short punchy sentences, varied pacing (some quick excited bursts, one slower moment for emphasis on the key insight), simple language, ending with a memorable closing line. Do not include stage directions, just the words to be spoken.
+1. A narration script (90-130 words) meant to be SPOKEN ALOUD with genuine enthusiasm and energy - like an excited doctor sharing a fascinating fact with a friend, not reading a textbook. Natural spoken rhythm, short punchy sentences, varied pacing, simple language, ending with a memorable closing line.
 
-   THE FIRST LINE IS CRITICAL - it must be a scroll-stopping hook, not a gentle intro. Use one of these patterns:
-   - A surprising/counter-intuitive claim ("Your brain eats itself every single night.")
-   - A direct question that creates a knowledge gap ("Why does your heart never get tired?")
-   - A bold statement that challenges assumption ("Everything you know about cholesterol is wrong.")
-   Avoid soft openers like "Did you know" or "Let's talk about" - open with the hook itself, immediately, no preamble.
+   This will be synthesized with ElevenLabs' Eleven v3 model, which supports inline emotion/delivery tags in square brackets. Use these tags sparingly but deliberately (3-5 times across the script) to shape delivery, e.g. [excited], [curious], [whispers], [laughs], [surprised], [emphasis]. Place a tag immediately before the phrase it should affect. Example: "[excited] Your brain eats itself every single night. [curious] Sounds terrifying, right? [emphasis] But it's actually saving your life."
+
+   THE FIRST LINE IS CRITICAL - it must be a scroll-stopping hook. This is non-negotiable: the very first words spoken must be the hook itself, with zero preamble.
+   BANNED opening words/phrases (do not start with these under any circumstance): "Did you know", "Let's talk about", "Have you ever", "So", "Today", "I want to tell you", "Here's the thing", any greeting.
+   REQUIRED pattern - pick one and make it punchy and specific to this exact topic:
+   - Shock/surprise fact stated as fact, no hedging: "Your brain eats itself every single night."
+   - A blunt, provocative question: "Why does your heart never get tired?"
+   - Direct contradiction of common belief: "Everything you've been told about cholesterol is wrong."
+   - A vivid, specific stat or image: "Right now, your kidneys are filtering a bathtub's worth of blood."
+   Write the hook FIRST, make sure it could stand alone as a compelling one-liner, then build the rest of the script around it.
 
 2. Break the narration into exactly 7 sequential chunks (in order, covering the full narration start to finish with no gaps or overlaps) - this is critical: each scene's image must visually match what is being said AT THAT MOMENT in the narration, not just the general topic. For each scene provide:
    - "narration_chunk": the exact words from the script spoken during this scene (used for timing sync)
