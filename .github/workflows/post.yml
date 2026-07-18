@@ -41,15 +41,25 @@ jobs:
           git commit -m "Auto: new post content and image [skip ci]" || echo "Nothing to commit"
           git push
 
-      - name: Build raw GitHub URL for image
+      - name: Build jsDelivr CDN URL for image
         run: |
           IMAGE_PATH=$(cat state/latest-image-path.txt)
-          RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/main/${IMAGE_PATH}"
+          RAW_URL="https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/${IMAGE_PATH}"
           echo "$RAW_URL" > state/raw-image-url.txt
           echo "Image will be published from: $RAW_URL"
 
-      - name: Wait for GitHub raw CDN to catch up
-        run: sleep 30
+      - name: Warm up jsDelivr cache and wait for propagation
+        run: |
+          IMAGE_URL=$(cat state/raw-image-url.txt)
+          for i in 1 2 3 4 5; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$IMAGE_URL")
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Image is live on jsDelivr."
+              break
+            fi
+            sleep 15
+          done
 
       - name: Publish to Instagram
         env:
