@@ -63,17 +63,19 @@ Structure it as exactly 6 slides:
 2. Slide 2-5: four content slides that build the explanation step by step, simple and clear, each with a short headline (max 8 words) and a brief supporting line (max 18 words)
 3. SUMMARY/CTA slide — a short takeaway line (max 12 words) plus "Follow for more" style closer (max 8 words)
 
+For EACH of the 6 slides, also provide an "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a realistic, relevant background image that actually depicts what that specific slide is explaining (e.g. if the slide is about kidney stones, describe kidneys/urinary system, not an abstract shape). Style: cinematic professional medical illustration or photorealistic medical visualization, soft lighting, no text or letters in the image, consistent visual style across all 6 slides (same rendering approach, same color grading) so the carousel feels cohesive, educational and reassuring tone, no gore or disturbing imagery.
+
 Also write a full Instagram caption (150-220 words) in a warm, story-style voice that expands on the topic, ending with 3-5 relevant hashtags on a new line.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
 {
   "slides": [
-    {"headline": "...", "subtext": ""},
-    {"headline": "...", "subtext": "..."},
-    {"headline": "...", "subtext": "..."},
-    {"headline": "...", "subtext": "..."},
-    {"headline": "...", "subtext": "..."},
-    {"headline": "...", "subtext": "..."}
+    {"headline": "...", "subtext": "", "image_prompt": "..."},
+    {"headline": "...", "subtext": "...", "image_prompt": "..."},
+    {"headline": "...", "subtext": "...", "image_prompt": "..."},
+    {"headline": "...", "subtext": "...", "image_prompt": "..."},
+    {"headline": "...", "subtext": "...", "image_prompt": "..."},
+    {"headline": "...", "subtext": "...", "image_prompt": "..."}
   ],
   "caption": "..."
 }`;

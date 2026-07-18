@@ -2,6 +2,8 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 function escapeXml(str) {
   return (str || "")
     .replace(/&/g, "&amp;")
@@ -25,30 +27,47 @@ function wrapText(text, maxCharsPerLine) {
   return lines;
 }
 
-// Rotating palette so consecutive carousels don't all look identical.
-const PALETTES = [
-  { from: "#1e3a5f", to: "#2c5f7c", accent: "#5fb8d6" },
-  { from: "#2d1b4e", to: "#4a2f7a", accent: "#b794f6" },
-  { from: "#1a3c34", to: "#2d6a4f", accent: "#74c69d" },
-  { from: "#4a1942", to: "#7a2f6b", accent: "#e0a3d0" },
-];
+async function generateBackgroundImage(prompt, outputPath) {
+  const fullPrompt = `${prompt}. Style: cinematic professional medical illustration, soft moody lighting, vertical composition, no text or letters anywhere in the image, educational and reassuring tone, high production quality, no gore or disturbing imagery.`;
 
-function pickPalette(seed) {
-  const idx = seed % PALETTES.length;
-  return PALETTES[idx];
+  const res = await fetch("https://api.openai.com/v1/images/generations", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-image-1",
+      prompt: fullPrompt,
+      size: "1024x1536",
+      quality: "high",
+      n: 1,
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`OpenAI image generation failed (${res.status}): ${errText}`);
+  }
+
+  const data = await res.json();
+  const b64 = data.data[0].b64_json;
+  fs.writeFileSync(outputPath, Buffer.from(b64, "base64"));
+  return outputPath;
 }
 
-function renderSlideSvg({ headline, subtext, slideIndex, totalSlides, palette, isHook, isCta }) {
-  const headlineSize = isHook ? 72 : 60;
-  const maxChars = isHook ? 16 : 20;
+// Overlay a dark gradient scrim (for text readability) + headline/subtext/progress dots
+// on top of the AI-generated background image.
+async function composeSlide({ backgroundPath, headline, subtext, slideIndex, totalSlides, isHook, isCta, outputPath }) {
+  const headlineSize = isHook ? 64 : 54;
+  const maxChars = isHook ? 18 : 22;
   const headlineLines = wrapText(headline, maxChars);
   const lineHeight = headlineSize + 12;
 
   const subtextLines = subtext ? wrapText(subtext, 34) : [];
-
   const headlineStartY = subtext
-    ? 420 - ((headlineLines.length - 1) * lineHeight) / 2
-    : 540 - ((headlineLines.length - 1) * lineHeight) / 2;
+    ? 680 - ((headlineLines.length - 1) * lineHeight) / 2
+    : 780 - ((headlineLines.length - 1) * lineHeight) / 2;
 
   const headlineSvg = headlineLines
     .map(
@@ -59,79 +78,91 @@ function renderSlideSvg({ headline, subtext, slideIndex, totalSlides, palette, i
     )
     .join("\n");
 
-  const subtextStartY = headlineStartY + headlineLines.length * lineHeight + 50;
+  const subtextStartY = headlineStartY + headlineLines.length * lineHeight + 45;
   const subtextSvg = subtextLines
     .map(
       (line, i) =>
-        `<text x="540" y="${subtextStartY + i * 44}" font-family="Arial, sans-serif" font-size="34" font-weight="400" fill="#ffffff" opacity="0.85" text-anchor="middle">${escapeXml(
+        `<text x="540" y="${subtextStartY + i * 40}" font-family="Arial, sans-serif" font-size="30" font-weight="400" fill="#ffffff" opacity="0.9" text-anchor="middle">${escapeXml(
           line
         )}</text>`
     )
     .join("\n");
 
-  // Progress dots showing slide position
-  const dotSpacing = 28;
+  const dotSpacing = 26;
   const dotsStartX = 540 - ((totalSlides - 1) * dotSpacing) / 2;
   const dotsSvg = Array.from({ length: totalSlides })
     .map((_, i) => {
       const isActive = i === slideIndex;
-      return `<circle cx="${dotsStartX + i * dotSpacing}" cy="1000" r="${
-        isActive ? 8 : 5
-      }" fill="#ffffff" opacity="${isActive ? 1 : 0.35}"/>`;
+      return `<circle cx="${dotsStartX + i * dotSpacing}" cy="1850" r="${
+        isActive ? 7 : 4.5
+      }" fill="#ffffff" opacity="${isActive ? 1 : 0.4}"/>`;
     })
     .join("\n");
 
-  const cornerLabel = isHook
-    ? "SWIPE →"
-    : isCta
-    ? ""
-    : `${slideIndex + 1} / ${totalSlides}`;
-
+  const cornerLabel = isHook ? "SWIPE →" : isCta ? "" : `${slideIndex + 1} / ${totalSlides}`;
   const cornerLabelSvg = cornerLabel
-    ? `<text x="540" y="120" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="${palette.accent}" text-anchor="middle" letter-spacing="3">${cornerLabel}</text>`
+    ? `<text x="540" y="100" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="3" opacity="0.9">${cornerLabel}</text>`
     : "";
 
-  return `
-  <svg width="1080" height="1080" xmlns="http://www.w3.org/2000/svg">
+  // Dark gradient scrim over the bottom ~55% of the image so white text stays readable
+  // regardless of what the AI-generated background looks like underneath.
+  const overlaySvg = `
+  <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${palette.from}"/>
-        <stop offset="100%" stop-color="${palette.to}"/>
+      <linearGradient id="scrim" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="40%" stop-color="#000000" stop-opacity="0.15"/>
+        <stop offset="65%" stop-color="#000000" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.9"/>
       </linearGradient>
     </defs>
-    <rect width="1080" height="1080" fill="url(#bg)"/>
-    <circle cx="950" cy="130" r="200" fill="${palette.accent}" opacity="0.08"/>
-    <circle cx="100" cy="980" r="240" fill="${palette.accent}" opacity="0.08"/>
-    <rect x="0" y="0" width="1080" height="6" fill="${palette.accent}"/>
+    <rect width="1080" height="1920" fill="url(#scrim)"/>
+    <rect x="0" y="0" width="1080" height="6" fill="#ffffff" opacity="0.6"/>
     ${cornerLabelSvg}
     ${headlineSvg}
     ${subtextSvg}
     ${dotsSvg}
-    <text x="540" y="1050" font-family="Arial, sans-serif" font-size="22" fill="#ffffff" opacity="0.5" text-anchor="middle">Medical Education • Simplified</text>
+    <text x="540" y="1890" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" opacity="0.6" text-anchor="middle">Medical Education • Simplified</text>
   </svg>`;
+
+  const bg = await sharp(backgroundPath)
+    .resize(1080, 1920, { fit: "cover", position: "attention" })
+    .toBuffer();
+
+  await sharp(bg)
+    .composite([{ input: Buffer.from(overlaySvg), top: 0, left: 0 }])
+    .png()
+    .toFile(outputPath);
+
+  return outputPath;
 }
 
 async function generateCarouselImages(carousel, outputDir) {
   fs.mkdirSync(outputDir, { recursive: true });
-  const seed = carousel.topic.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  const palette = pickPalette(seed);
   const total = carousel.slides.length;
   const paths = [];
 
   for (let i = 0; i < total; i++) {
     const slide = carousel.slides[i];
-    const svg = renderSlideSvg({
+    const bgPath = path.join(outputDir, `bg-${i + 1}.png`);
+    console.log(`Generating background ${i + 1}/${total}: ${slide.image_prompt}`);
+    await generateBackgroundImage(slide.image_prompt, bgPath);
+
+    const outPath = path.join(outputDir, `slide-${i + 1}.png`);
+    await composeSlide({
+      backgroundPath: bgPath,
       headline: slide.headline,
       subtext: slide.subtext,
       slideIndex: i,
       totalSlides: total,
-      palette,
       isHook: i === 0,
       isCta: i === total - 1,
+      outputPath: outPath,
     });
-    const outPath = path.join(outputDir, `slide-${i + 1}.png`);
-    await sharp(Buffer.from(svg)).png().toFile(outPath);
+
+    fs.unlinkSync(bgPath); // keep only the final composed slide
     paths.push(outPath);
+    await new Promise((r) => setTimeout(r, 1000)); // be polite to rate limits
   }
 
   return paths;

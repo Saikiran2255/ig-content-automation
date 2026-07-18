@@ -30,6 +30,8 @@ jobs:
         run: node scripts/generate-carousel-content.js
 
       - name: Generate carousel slide images
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node scripts/generate-carousel-images.js
 
       - name: Commit generated assets to repo
