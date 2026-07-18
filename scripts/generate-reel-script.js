@@ -57,9 +57,15 @@ async function generateReelScript() {
   const prompt = `You are writing content for a 35-45 second medical education Instagram Reel, for a doctor's personal account. Topic: "${topic}"${guidanceLine}
 
 Write:
-1. A narration script (90-130 words) meant to be SPOKEN ALOUD with genuine enthusiasm and energy - like an excited doctor sharing a fascinating fact with a friend, not reading a textbook. Natural spoken rhythm, short punchy sentences, varied pacing, simple language, ending with a memorable closing line.
+1. A narration script (90-130 words) written as a MINI STORY, not a list of facts. Structure it with a narrative arc:
+   - HOOK (first line): drop the listener into an intriguing moment or mystery - make them need to know what happens next
+   - RISING TENSION: build curiosity, raise a question in the listener's mind, use phrases like "but here's what's strange" or "and that's when things get interesting"
+   - THE REVEAL: deliver the core insight as a payoff to the tension you built - this should feel like an "aha" moment, not a fact dump
+   - CLOSING LINE: a memorable, slightly punchy line that recontextualizes everything, makes them want to rewatch or share
 
-   This will be synthesized with ElevenLabs' Eleven v3 model, which supports inline emotion/delivery tags in square brackets. Use these tags sparingly but deliberately (3-5 times across the script) to shape delivery, e.g. [excited], [curious], [whispers], [laughs], [surprised], [emphasis]. Place a tag immediately before the phrase it should affect. Example: "[excited] Your brain eats itself every single night. [curious] Sounds terrifying, right? [emphasis] But it's actually saving your life."
+   Write it exactly like you're narrating a story to someone leaning in to listen - not explaining a topic. Use "you" to make it personal ("your body is doing this right now"). Vary sentence length: short sentences for tension/punch, one longer flowing sentence for the reveal. This will be spoken with ElevenLabs' Eleven v3 model, which supports inline emotion/delivery tags in square brackets - use these tags deliberately (4-6 times) to shape the storytelling performance: [curious], [whispers], [excited], [pause], [surprised], [emphasis], [warm]. Place a tag immediately before the phrase it should affect, mirroring how a narrator's voice would actually shift at that story beat.
+
+   Example structure: "[curious] Right now, something strange is happening inside your skull. [pause] Your brain is eating itself. [whispers] That sounds terrifying. [pause] But here's the twist - [excited] it's the reason you're not losing your mind by lunchtime. [emphasis] Every night, it clears out the exact toxins that cause memory loss..."
 
    THE FIRST LINE IS CRITICAL - it must be a scroll-stopping hook. This is non-negotiable: the very first words spoken must be the hook itself, with zero preamble.
    BANNED opening words/phrases (do not start with these under any circumstance): "Did you know", "Let's talk about", "Have you ever", "So", "Today", "I want to tell you", "Here's the thing", any greeting.
