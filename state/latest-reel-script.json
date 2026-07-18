@@ -1,42 +1,42 @@
 {
-  "topic": "Why does high blood pressure often have no symptoms?",
-  "narration": "[curious] Your arteries are silently tearing apart right now, and you feel absolutely nothing. [pause] Here's why that's terrifying. [whispers] Your body is designed to alert you to danger - a cut, a burn, a broken bone sends immediate pain signals. But here's what's strange: [emphasis] high blood pressure has no nerve endings to trigger those alarms. Your blood vessels are stretching, your heart is straining, microscopic tears are forming. [pause] And your brain? [surprised] It has no idea. It's like a slow leak in your foundation while you're watching TV upstairs. [excited] The damage compounds silently for years - until one day, the heart attack or stroke announces what's been happening all along. [warm] That's why we call it the silent killer. Your body can't warn you about what it can't feel.",
+  "topic": "How does the body regulate blood sugar?",
+  "narration": "[curious] Right now, your blood sugar is trying to kill you. [pause] Too high, and it damages every organ in your body. Too low, and you'd lose consciousness in minutes. [whispers] So how are you still alive? [pause] Here's what's happening - [excited] your pancreas is running a non-stop surveillance operation. The moment sugar spikes after a meal, it releases insulin like a key that unlocks your cells, letting glucose rush inside for energy. [emphasis] But when levels drop too low, it flips the script entirely. [warm] A second hormone called glucagon tells your liver to dump stored sugar back into your bloodstream. [pause] It's a molecular tug-of-war happening every single second, keeping you in the narrow zone between coma and catastrophe.",
   "scenes": [
     {
-      "narration_chunk": "Your arteries are silently tearing apart right now, and you feel absolutely nothing.",
-      "caption": "You feel nothing",
-      "image_prompt": "Cinematic medical illustration showing arterial walls with microscopic tears and stress damage, deep red and blue tones, cross-section view revealing inner vessel damage, dramatic lighting highlighting the silent destruction"
+      "narration_chunk": "Right now, your blood sugar is trying to kill you.",
+      "caption": "Your blood sugar's deadly game",
+      "image_prompt": "Cinematic medical illustration of glucose molecules glowing red like warning signals flowing through a bloodstream, dark dramatic lighting, ominous atmosphere, photorealistic 3D render with depth of field"
     },
     {
-      "narration_chunk": "Your body is designed to alert you to danger - a cut, a burn, a broken bone sends immediate pain signals.",
-      "caption": "Pain warns you instantly",
-      "image_prompt": "Split-screen medical illustration showing nerve endings firing bright yellow warning signals from skin injury, electric-like impulses traveling to brain, deep red and blue color palette, anatomical cross-section style"
+      "narration_chunk": "Too high, and it damages every organ in your body. Too low, and you'd lose consciousness in minutes.",
+      "caption": "Too high or too low",
+      "image_prompt": "Split-screen medical visualization: left side showing organs stressed by high glucose with red inflammation, right side showing brain dimming from low glucose, cinematic lighting, photorealistic 3D medical render"
     },
     {
-      "narration_chunk": "But here's what's strange: high blood pressure has no nerve endings to trigger those alarms.",
-      "caption": "No nerve endings here",
-      "image_prompt": "Medical illustration of blood vessel cross-section with conspicuous absence of nerve endings, empty space where pain receptors would be, deep red arterial walls, clinical blue background, annotated anatomical style"
+      "narration_chunk": "So how are you still alive? Here's what's happening - your pancreas is running a non-stop surveillance operation.",
+      "caption": "Your pancreas never sleeps",
+      "image_prompt": "Detailed 3D render of human pancreas glowing with activity, sensor-like beta cells illuminated in blue monitoring bloodstream, control room aesthetic, cinematic medical visualization with dramatic lighting"
     },
     {
-      "narration_chunk": "Your blood vessels are stretching, your heart is straining, microscopic tears are forming.",
-      "caption": "Silent damage accumulating",
-      "image_prompt": "Detailed medical visualization of overstretched blood vessel walls bulging outward, heart muscle fibers under tension, tiny ruptures forming, deep reds and blues, cross-sectional anatomical rendering showing progressive damage"
+      "narration_chunk": "The moment sugar spikes after a meal, it releases insulin like a key that unlocks your cells,",
+      "caption": "Insulin unlocks your cells",
+      "image_prompt": "Microscopic view of insulin molecules shaped like glowing blue keys approaching cell receptors that look like locks, cinematic 3D medical animation style, golden glucose particles in background"
     },
     {
-      "narration_chunk": "It's like a slow leak in your foundation while you're watching TV upstairs.",
-      "caption": "Like a hidden leak",
-      "image_prompt": "Metaphorical split-level house illustration showing water slowly seeping through foundation cracks in basement while peaceful living room scene above remains undisturbed, muted blues and grays, cinematic medical education style"
+      "narration_chunk": "letting glucose rush inside for energy.",
+      "caption": "Glucose floods in",
+      "image_prompt": "Interior view of cell membrane with glucose molecules streaming through opened receptor channels like a rush of golden particles, mitochondria converting them to energy with warm glow, photorealistic cellular visualization"
     },
     {
-      "narration_chunk": "The damage compounds silently for years - until one day, the heart attack or stroke announces what's been happening all along.",
-      "caption": "Years of silent damage",
-      "image_prompt": "Time-lapse medical illustration showing progressive arterial damage over years, ending in dramatic rupture or blockage, deep crimson and navy tones, calendar pages or clock imagery suggesting passage of time, clinical anatomical style"
+      "narration_chunk": "But when levels drop too low, it flips the script entirely. A second hormone called glucagon tells your liver to dump stored sugar back into your bloodstream.",
+      "caption": "Glucagon flips the switch",
+      "image_prompt": "3D visualization of liver releasing stored glycogen that breaks into glucose molecules, purple glucagon hormones triggering the release, glucose particles flowing into bloodstream, dramatic cinematic medical render with dynamic lighting"
     },
     {
-      "narration_chunk": "That's why we call it the silent killer. Your body can't warn you about what it can't feel.",
-      "caption": "The silent killer",
-      "image_prompt": "Powerful medical illustration of cardiovascular system in deep reds and blues with muted alarm symbols crossed out or faded, emphasizing the absence of warning signals, clean anatomical rendering, somber professional tone"
+      "narration_chunk": "It's a molecular tug-of-war happening every single second, keeping you in the narrow zone between coma and catastrophe.",
+      "caption": "A constant balancing act",
+      "image_prompt": "Abstract visualization of balanced scale with insulin and glucagon on opposite sides, glucose levels represented by glowing meter in perfect green zone between red danger zones, cinematic depth, photorealistic medical illustration"
     }
   ],
-  "caption": "This is exactly why routine blood pressure checks aren't optional – they're essential. Your body's warning system has a blind spot, and high blood pressure sits right in it.\n\nWithout nerve endings in your arterial walls, years of damage can accumulate while you feel perfectly fine. No headaches. No dizziness. Nothing. Until suddenly, everything.\n\nThe good news? We have the technology your body lacks. A simple blood pressure cuff reveals what your nerves can't feel. Regular monitoring turns the silent killer into something we can see, measure, and control.\n\nKnow your numbers. It's the alarm system your arteries never had.\n\n#BloodPressure #HeartHealth #PreventiveMedicine #SilentKiller #CardiovascularHealth"
+  "caption": "Your body is performing an incredible balancing act every single moment 🎯\n\nBlood sugar regulation is one of the most precise systems in human physiology. Your pancreas constantly monitors glucose levels and responds in real-time - releasing insulin when levels rise and glucagon when they fall.\n\nThis delicate balance keeps you functioning optimally. When this system breaks down (as in diabetes), we see just how critical this regulation really is.\n\nIt's a reminder that even when we're not thinking about it, our bodies are working tirelessly to keep us alive and thriving.\n\nWhat surprised you most about this process? 💭\n\n#MedicalEducation #BloodSugar #Insulin #HumanPhysiology #MedEd"
 }
