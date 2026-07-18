@@ -67,13 +67,33 @@ async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
     clipPaths.push(clipPath);
   }
 
-  const concatListPath = path.join(tmpDir, "concat.txt");
-  fs.writeFileSync(concatListPath, clipPaths.map((p) => `file '${p}'`).join("\n"));
-  const silentVideoPath = path.join(tmpDir, "silent-combined.mp4");
-  execSync(
-    `ffmpeg -y -f concat -safe 0 -i "${concatListPath}" -c copy "${silentVideoPath}"`,
-    { stdio: "inherit" }
-  );
+  // Concat clips with crossfade transitions instead of hard cuts, using xfade
+  const transitionDuration = 0.4;
+  let silentVideoPath;
+  if (clipPaths.length === 1) {
+    silentVideoPath = clipPaths[0];
+  } else {
+    silentVideoPath = path.join(tmpDir, "silent-combined.mp4");
+    const inputs = clipPaths.map((p) => `-i "${p}"`).join(" ");
+    let filterChain = "";
+    let lastLabel = "0:v";
+    let cumulativeOffset = 0;
+    for (let i = 1; i < clipPaths.length; i++) {
+      const clipDuration = perScene;
+      cumulativeOffset += clipDuration - transitionDuration;
+      const outLabel = i === clipPaths.length - 1 ? "outv" : `v${i}`;
+      filterChain += `[${lastLabel}][${i}:v]xfade=transition=fade:duration=${transitionDuration}:offset=${cumulativeOffset.toFixed(
+        2
+      )}[${outLabel}];`;
+      lastLabel = outLabel;
+    }
+    filterChain = filterChain.slice(0, -1); // remove trailing semicolon
+
+    execSync(
+      `ffmpeg -y ${inputs} -filter_complex "${filterChain}" -map "[outv]" -c:v libx264 -pix_fmt yuv420p "${silentVideoPath}"`,
+      { stdio: "inherit" }
+    );
+  }
 
   execSync(
     `ffmpeg -y -i "${silentVideoPath}" -i "${audioPath}" -c:v copy -c:a aac -b:a 192k -shortest "${outputPath}"`,

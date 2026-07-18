@@ -4,7 +4,7 @@ const path = require("path");
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 async function generateSceneImage(prompt, outputPath) {
-  const fullPrompt = `${prompt}. Style: clean flat medical illustration, soft professional color palette, vertical composition, no text or letters anywhere in the image, educational and reassuring tone, high quality, no gore or disturbing imagery.`;
+  const fullPrompt = `${prompt}. Style: cinematic flat medical illustration, soft professional color palette with warm-to-cool gradient lighting, vertical composition, consistent art style across a series (clean lines, subtle depth, gentle shadows), no text or letters anywhere in the image, educational and reassuring tone, high production quality, no gore or disturbing imagery.`;
 
   const res = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
@@ -16,7 +16,7 @@ async function generateSceneImage(prompt, outputPath) {
       model: "gpt-image-1",
       prompt: fullPrompt,
       size: "1024x1536", // portrait, closest supported to 9:16
-      quality: "medium",
+      quality: "high",
       n: 1,
     }),
   });

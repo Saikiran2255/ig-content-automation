@@ -64,15 +64,17 @@ Write:
    - A direct question that creates a knowledge gap ("Why does your heart never get tired?")
    - A bold statement that challenges assumption ("Everything you know about cholesterol is wrong.")
    Avoid soft openers like "Did you know" or "Let's talk about" - open with the hook itself, immediately, no preamble.
-2. 5 scenes that divide the narration into a visual sequence. For each scene provide:
+2. 7 scenes that divide the narration into a visual sequence, faster-paced (shorter per scene) for better retention. For each scene provide:
    - "caption": a short on-screen text phrase (max 6 words) - the key phrase/punchline for that moment
-   - "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a clean, professional medical illustration for this scene (e.g. anatomical diagram style, clean flat illustration, soft color palette, no text in the image, no gore, educational and reassuring tone, suitable for a general audience)
+   - "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a clean, professional medical illustration for this scene (e.g. anatomical diagram style, clean flat illustration, soft color palette, no text in the image, no gore, educational and reassuring tone, suitable for a general audience). Keep visual style consistent across all 7 (same rendering style, same color family) so the sequence feels like one coherent piece, not disconnected images.
 3. A full Instagram caption (100-150 words) for the post itself, ending with 3-5 hashtags on a new line.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
 {
   "narration": "...",
   "scenes": [
+    {"caption": "...", "image_prompt": "..."},
+    {"caption": "...", "image_prompt": "..."},
     {"caption": "...", "image_prompt": "..."},
     {"caption": "...", "image_prompt": "..."},
     {"caption": "...", "image_prompt": "..."},
