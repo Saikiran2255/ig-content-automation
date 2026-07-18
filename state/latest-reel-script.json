@@ -1,27 +1,42 @@
 {
-  "topic": "How kidney stones form and why they hurt so much",
-  "narration": "Kidney stones hurt more than childbirth for some people. But why? It starts when minerals in your urine get too concentrated. Think of it like sugar crystallizing in a supersaturated solution. These crystals stick together, forming stones that can grow from a grain of sand to the size of a golf ball. The pain happens when these stones start moving through your ureter, the narrow tube connecting your kidney to your bladder. It's only three millimeters wide. The stone gets stuck, causing intense cramping and stretching. Your body tries to push it through with powerful muscle contractions. That's why the pain comes in waves. Small stones pass on their own, but larger ones may need intervention. Stay hydrated to keep those minerals diluted.",
+  "topic": "What happens in your brain during deep sleep",
+  "narration": "Your brain literally washes itself every night while you sleep. Here's how it works. During deep sleep, your brain cells actually shrink. They get smaller, up to sixty percent smaller. This opens up these tiny spaces between them. And then something incredible happens. Cerebrospinal fluid rushes through like a power washer, flushing out all the toxic waste that built up during the day. We're talking proteins linked to Alzheimer's, metabolic junk, cellular debris. This glymphatic system only kicks into high gear when you're in deep sleep. Skip the deep sleep? Your brain doesn't get its wash cycle. So when someone says they'll sleep when they're dead, remind them their brain is literally cleaning itself to prevent exactly that.",
   "scenes": [
     {
-      "caption": "Worse than childbirth sometimes",
-      "image_prompt": "Clean medical illustration of a person's silhouette clutching their lower back in discomfort, soft blue and coral color palette, minimalist anatomical style showing kidney location highlighted, professional educational diagram with gentle reassuring aesthetic, side view"
+      "narration_chunk": "Your brain literally washes itself every night while you sleep.",
+      "caption": "Your brain washes itself nightly",
+      "image_prompt": "Photorealistic human brain glowing soft blue and purple, surrounded by gentle flowing water ripples in a dark peaceful environment, ethereal luminous quality, medical illustration style"
     },
     {
-      "caption": "Minerals crystallize in your urine",
-      "image_prompt": "Microscopic view illustration of calcium oxalate crystals forming in yellow-tinted liquid, geometric crystal shapes in warm orange and amber tones, clean scientific diagram style, educational medical illustration showing crystallization process, no gore"
+      "narration_chunk": "Here's how it works. During deep sleep, your brain cells actually shrink. They get smaller, up to sixty percent smaller.",
+      "caption": "Brain cells shrink 60%",
+      "image_prompt": "Close-up cross-section of neurons and brain cells visibly shrinking and compressing, shown in soft blue and purple tones, with cells reducing in size with space appearing between them, scientific medical visualization"
     },
     {
-      "caption": "Stones grow from sand to golf ball",
-      "image_prompt": "Size comparison medical illustration showing kidney stones in progressive sizes from tiny grain to large sphere, arranged in ascending order, soft neutral background, clean flat design, beige and earth tone palette, professional anatomical educational style"
+      "narration_chunk": "This opens up these tiny spaces between them. And then something incredible happens.",
+      "caption": "Creating tiny channels",
+      "image_prompt": "Microscopic view of enlarged gaps and channels opening between shrunken purple-blue neurons, dark spaces forming pathways between cells, detailed medical illustration with glowing cell outlines"
     },
     {
-      "caption": "Stuck in a 3mm tube",
-      "image_prompt": "Anatomical cross-section illustration of ureter tube with kidney stone lodged inside, soft pink and coral colors, clean medical diagram showing ureter walls stretching around stone, educational style with clear anatomical detail, gentle color palette"
+      "narration_chunk": "Cerebrospinal fluid rushes through like a power washer, flushing out all the toxic waste that built up during the day.",
+      "caption": "Fluid power-washes your brain",
+      "image_prompt": "Clear blue cerebrospinal fluid flowing powerfully through neural channels between brain cells, washing away dark particles and debris, dynamic flow visualization in blue and purple medical art style"
     },
     {
-      "caption": "Pain comes in waves",
-      "image_prompt": "Abstract medical illustration showing wave pattern overlaid on kidney and ureter anatomy, rhythmic curved lines in blue and red indicating muscle contractions, clean modern design, educational diagram style, soft professional color scheme"
+      "narration_chunk": "We're talking proteins linked to Alzheimer's, metabolic junk, cellular debris.",
+      "caption": "Removes Alzheimer's proteins & toxins",
+      "image_prompt": "Dark toxic protein clumps and cellular waste particles being swept away by flowing blue fluid between purple neurons, debris dissolving and clearing, detailed medical cross-section illustration"
+    },
+    {
+      "narration_chunk": "This glymphatic system only kicks into high gear when you're in deep sleep. Skip the deep sleep?",
+      "caption": "Only works in deep sleep",
+      "image_prompt": "Split comparison showing active glymphatic system with flowing blue fluid on one side versus stagnant blocked system with accumulated dark waste on the other, purple-blue brain tissue, medical diagram style"
+    },
+    {
+      "narration_chunk": "Your brain doesn't get its wash cycle. So when someone says they'll sleep when they're dead, remind them their brain is literally cleaning itself to prevent exactly that.",
+      "caption": "Sleep cleans. Skip it, suffer.",
+      "image_prompt": "Pristine clean brain hemisphere glowing vibrant blue-purple on left contrasted with darker brain with visible toxic buildup on right, powerful before-after visualization, photorealistic medical illustration"
     }
   ],
-  "caption": "Ever wondered why kidney stones are considered one of the most painful experiences? 😰\n\nIt's all about location and size mismatch. When minerals in your urine become too concentrated, they crystallize and form stones. The real problem? These stones have to pass through your ureter—a tube that's only 3mm wide.\n\nAs your body tries to push the stone through with powerful muscle contractions, you experience intense, wave-like pain. The good news? Most small stones pass naturally with proper hydration.\n\nPrevention tip: Drink plenty of water throughout the day to keep those minerals diluted! 💧\n\nQuestions? Drop them below! 👇\n\n#KidneyStones #MedicalEducation #DoctorTok #HealthTips #Urology"
+  "caption": "Your brain has a self-cleaning system that ONLY works during deep sleep 🧠✨\n\nThe glymphatic system is one of the most fascinating discoveries in neuroscience. When you enter deep sleep, your neurons actually shrink to create space for cerebrospinal fluid to flush out toxic proteins (including those linked to Alzheimer's and dementia).\n\nThis is why consistently poor sleep is associated with cognitive decline and neurodegenerative diseases. Your brain literally needs those deep sleep cycles to take out the trash.\n\nPrioritizing 7-9 hours of quality sleep isn't lazy—it's essential brain maintenance. What's your biggest barrier to good sleep? Let me know below! 👇\n\n#sleepscience #neuroscience #brainhealth #deepsleep #medicalfacts"
 }
