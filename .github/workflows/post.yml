@@ -2,8 +2,9 @@ name: Auto Post to Instagram
 
 on:
   schedule:
-    # Runs once daily at 19:00 (7 PM) IST (13:30 UTC)
-    - cron: "30 13 * * *"
+    # 3x/week (Mon, Wed, Sat) at 19:00 IST — combined with carousel posts
+    # (Tue/Fri) this lands in the data-backed 3-5 posts/week sweet spot
+    - cron: "30 13 * * 1,3,6"
   workflow_dispatch: {} # allows manual trigger from the Actions tab for testing
 
 permissions:
