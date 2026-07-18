@@ -1,30 +1,36 @@
 {
-  "topic": "Do you actually need 8 glasses of water a day?",
+  "topic": "What is sepsis and why is early recognition critical?",
   "slides": [
     {
-      "headline": "8 glasses of water daily? That's a myth.",
-      "subtext": ""
+      "headline": "Could a simple infection become life-threatening?",
+      "subtext": "",
+      "image_prompt": "Cinematic close-up view of human bloodstream with red blood cells flowing through a vessel, soft dramatic lighting, photorealistic medical visualization, warm muted tones with subtle amber glow, clean professional medical illustration style, peaceful yet concerning mood, no text"
     },
     {
-      "headline": "The '8x8 rule' has zero scientific backing",
-      "subtext": "No study actually supports drinking eight 8-ounce glasses daily for everyone."
+      "headline": "Sepsis: Your Body's Dangerous Overreaction",
+      "subtext": "When infection triggers extreme inflammation, it can damage your own organs and tissues.",
+      "image_prompt": "Photorealistic visualization of human body silhouette showing multiple organs (heart, lungs, kidneys) with subtle inflammatory markers spreading through bloodstream, soft cinematic lighting, warm amber and red tones, professional medical illustration style, educational and clear presentation, no text"
     },
     {
-      "headline": "Your actual needs depend on many factors",
-      "subtext": "Body size, activity level, climate, and health conditions all change your requirements."
+      "headline": "It Starts With Common Infections",
+      "subtext": "Pneumonia, urinary tract infections, or skin wounds can all trigger sepsis if untreated.",
+      "image_prompt": "Split visualization showing lungs with pneumonia, bladder with infection, and skin wound, connected by blood vessels, photorealistic medical illustration, soft professional lighting, warm muted color palette with amber tones, clean educational style, reassuring presentation, no text"
     },
     {
-      "headline": "Your body already tells you when hydrated",
-      "subtext": "Thirst is reliable. Pale yellow urine means you're doing fine already."
+      "headline": "Warning Signs You Cannot Ignore",
+      "subtext": "High fever, rapid heartbeat, confusion, and extreme weakness are red flags needing urgent care.",
+      "image_prompt": "Cinematic view of a patient monitoring display showing vital signs with elevated heart rate and temperature readings on medical equipment, soft blue and amber screen glow, photorealistic hospital setting, professional medical photography style, urgent yet calm mood, no text or numbers"
     },
     {
-      "headline": "Food provides about 20% of water intake",
-      "subtext": "Fruits, vegetables, soups all count. You're not just relying on beverages."
+      "headline": "Every Hour Counts For Survival",
+      "subtext": "Early antibiotics and fluids drastically improve outcomes. Delay can mean organ failure or death.",
+      "image_prompt": "Photorealistic close-up of IV drip bag with antibiotic medication flowing through transparent tubing, soft clinical lighting, warm professional tones, shallow depth of field, cinematic medical photography style, hopeful and urgent mood, clean hospital environment background, no text"
     },
     {
-      "headline": "Listen to your body, not arbitrary rules",
-      "subtext": "Follow @username for evidence-based health tips"
+      "headline": "Know sepsis. Seek help immediately. Save lives.",
+      "subtext": "Follow for more life-saving medical insights",
+      "image_prompt": "Warm, hopeful view of doctor's hands holding a stethoscope with soft natural lighting, photorealistic medical photography, professional and reassuring composition, muted warm color grading with amber tones, clean clinical background softly blurred, caring and educational mood, no text"
     }
   ],
-  "caption": "I get asked about water intake constantly in clinic. Someone always mentions those famous '8 glasses a day' — but here's the truth: that number was never based on science.\n\nYour hydration needs are as unique as you are. An office worker in air conditioning needs different amounts than a marathon runner in summer heat. Your kidneys are incredible at regulating fluid balance, and your brain has a built-in alert system called thirst.\n\nThe best hydration indicator? Your urine color. Aim for pale yellow. Dark? Drink more. Completely clear? You might be overdoing it.\n\nAnd remember — coffee, tea, milk, and water-rich foods all count toward hydration. You don't need to force yourself to drink when you're not thirsty just to hit some arbitrary number.\n\nBottom line: trust your body's signals. Drink when thirsty. Adjust for exercise and heat. That's it.\n\n#HydrationMyths #MedicalFacts #DoctorTips #EvidenceBasedMedicine #HealthMyths"
+  "caption": "Sepsis is something I wish more people understood. It's not just a severe infection—it's what happens when your body's response to infection spirals out of control, attacking its own tissues and organs.\n\nI've seen patients come in with what seemed like a simple UTI or pneumonia, only to deteriorate rapidly because sepsis went unrecognized. The scary part? It can happen to anyone, at any age.\n\nThe good news: early recognition changes everything. If you or a loved one has an infection plus fever, rapid heart rate, confusion, or extreme weakness—don't wait. Get to the ER.\n\nTime is truly tissue when it comes to sepsis. Prompt antibiotics and supportive care can be the difference between recovery and tragedy.\n\nKnowledge is power, and I'm here to help you recognize the signs that matter.\n\n#SepsisAwareness #MedicalEducation #DoctorExplains #HealthLiteracy #KnowTheSigns"
 }
