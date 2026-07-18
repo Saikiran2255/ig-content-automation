@@ -2,8 +2,7 @@ name: Auto Post to Instagram
 
 on:
   schedule:
-    # Runs at 7:30 AM and 19:00 (7 PM) IST (01:00 and 13:30 UTC)
-    - cron: "0 1 * * *"
+    # Runs once daily at 19:00 (7 PM) IST (13:30 UTC)
     - cron: "30 13 * * *"
   workflow_dispatch: {} # allows manual trigger from the Actions tab for testing
 
