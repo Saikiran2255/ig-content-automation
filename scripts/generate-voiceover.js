@@ -22,6 +22,7 @@ async function generateVoiceover(text, outputPath) {
         similarity_boost: 0.85,
         style: 0.7,
         use_speaker_boost: true,
+        speed: 1.15,
       },
     }),
   });
