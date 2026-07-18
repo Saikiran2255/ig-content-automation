@@ -3,36 +3,6 @@ const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const PALETTES = [
-  { from: "#1e3a5f", to: "#2c5f7c" },
-  { from: "#2d1b4e", to: "#4a2f7a" },
-  { from: "#1a3c34", to: "#2d6a4f" },
-  { from: "#4a1942", to: "#7a2f6b" },
-];
-
-function pickPalette(seed) {
-  return PALETTES[seed % PALETTES.length];
-}
-
-async function makeBackgroundImage(topic, outPath) {
-  const seed = Buffer.from(topic).reduce((a, c) => a + c.charCodeAt(0), 0);
-  const palette = pickPalette(seed);
-  const svg = `
-  <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${palette.from}"/>
-        <stop offset="100%" stop-color="${palette.to}"/>
-      </linearGradient>
-    </defs>
-    <rect width="1080" height="1920" fill="url(#bg)"/>
-    <circle cx="900" cy="300" r="260" fill="#ffffff" opacity="0.05"/>
-    <circle cx="150" cy="1600" r="300" fill="#ffffff" opacity="0.05"/>
-  </svg>`;
-  await sharp(Buffer.from(svg)).png().toFile(outPath);
-  return outPath;
-}
-
 function getAudioDuration(audioPath) {
   const out = execSync(
     `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`
@@ -50,43 +20,66 @@ function escapeForFfmpeg(text) {
     .replace(/,/g, "\\,");
 }
 
-function buildDrawtextFilters(captions, duration) {
-  const fontfile = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf";
-  const segmentLength = duration / captions.length;
-  return captions
-    .map((cap, i) => {
-      const start = i * segmentLength;
-      const end = start + segmentLength;
-      const safeText = escapeForFfmpeg(cap);
-      return `drawtext=fontfile=${fontfile}:text='${safeText}':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=(h-text_h)/2:box=1:boxcolor=black@0.35:boxborderw=30:enable='between(t,${start.toFixed(
-        2
-      )},${end.toFixed(2)})'`;
-    })
-    .join(",");
+async function prepareSceneImage(inputPath, outputPath) {
+  await sharp(inputPath)
+    .resize(1080, 1920, { fit: "cover", position: "attention" })
+    .png()
+    .toFile(outputPath);
+  return outputPath;
 }
 
-async function assembleReel({ topic, onScreenCaptions, audioPath, outputPath }) {
-  const bgPath = path.join(path.dirname(outputPath), "bg.png");
-  await makeBackgroundImage(topic, bgPath);
-
-  const duration = getAudioDuration(audioPath);
-  const drawtextChain = buildDrawtextFilters(onScreenCaptions, duration);
-
+async function assembleReel({ scenes, audioPath, outputPath, tmpDir }) {
+  fs.mkdirSync(tmpDir, { recursive: true });
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-  const cmd = [
-    "ffmpeg -y",
-    `-loop 1 -i "${bgPath}"`,
-    `-i "${audioPath}"`,
-    `-vf "${drawtextChain}"`,
-    `-t ${duration.toFixed(2)}`,
-    "-c:v libx264 -pix_fmt yuv420p -r 30",
-    "-c:a aac -b:a 192k",
-    "-shortest",
-    `"${outputPath}"`,
-  ].join(" ");
+  const duration = getAudioDuration(audioPath);
+  const perScene = duration / scenes.length;
+  const fontfile = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf";
 
-  execSync(cmd, { stdio: "inherit" });
+  const preparedPaths = [];
+  for (let i = 0; i < scenes.length; i++) {
+    const prepped = path.join(tmpDir, `prepped-${i}.png`);
+    await prepareSceneImage(scenes[i].imagePath, prepped);
+    preparedPaths.push(prepped);
+  }
+
+  const clipPaths = [];
+  const fps = 30;
+  for (let i = 0; i < scenes.length; i++) {
+    const clipPath = path.join(tmpDir, `clip-${i}.mp4`);
+    const frames = Math.round(perScene * fps);
+    const zoomExpr =
+      i % 2 === 0 ? "zoom+0.0015" : "if(eq(on,0),1.15,max(1.0,zoom-0.0015))";
+
+    const caption = escapeForFfmpeg(scenes[i].caption);
+    const drawtext = `drawtext=fontfile=${fontfile}:text='${caption}':fontcolor=white:fontsize=44:x=(w-text_w)/2:y=h-260:box=1:boxcolor=black@0.45:boxborderw=18`;
+
+    const cmd = [
+      "ffmpeg -y",
+      `-loop 1 -i "${preparedPaths[i]}"`,
+      `-vf "scale=1350:2400,zoompan=z='${zoomExpr}':d=${frames}:s=1080x1920:fps=${fps},${drawtext}"`,
+      `-t ${perScene.toFixed(2)}`,
+      "-c:v libx264 -pix_fmt yuv420p",
+      `"${clipPath}"`,
+    ].join(" ");
+
+    execSync(cmd, { stdio: "inherit" });
+    clipPaths.push(clipPath);
+  }
+
+  const concatListPath = path.join(tmpDir, "concat.txt");
+  fs.writeFileSync(concatListPath, clipPaths.map((p) => `file '${p}'`).join("\n"));
+  const silentVideoPath = path.join(tmpDir, "silent-combined.mp4");
+  execSync(
+    `ffmpeg -y -f concat -safe 0 -i "${concatListPath}" -c copy "${silentVideoPath}"`,
+    { stdio: "inherit" }
+  );
+
+  execSync(
+    `ffmpeg -y -i "${silentVideoPath}" -i "${audioPath}" -c:v copy -c:a aac -b:a 192k -shortest "${outputPath}"`,
+    { stdio: "inherit" }
+  );
+
   return outputPath;
 }
 
@@ -95,32 +88,28 @@ module.exports = { assembleReel };
 if (require.main === module) {
   const scriptPath = path.join(__dirname, "..", "state", "latest-reel-script.json");
   const voiceoverPathFile = path.join(__dirname, "..", "state", "latest-voiceover-path.txt");
+  const scenesDirFile = path.join(__dirname, "..", "state", "latest-scenes-dir.txt");
 
   const script = JSON.parse(fs.readFileSync(scriptPath, "utf-8"));
-  const audioPath = path.join(
-    __dirname,
-    "..",
-    fs.readFileSync(voiceoverPathFile, "utf-8").trim()
-  );
-  const outputPath = path.join(
-    __dirname,
-    "..",
-    "assets",
-    "reels",
-    `reel-${Date.now()}.mp4`
-  );
+  const audioPath = path.join(__dirname, "..", fs.readFileSync(voiceoverPathFile, "utf-8").trim());
+  const scenesDir = path.join(__dirname, "..", fs.readFileSync(scenesDirFile, "utf-8").trim());
 
-  assembleReel({
-    topic: script.topic,
-    onScreenCaptions: script.on_screen_captions,
-    audioPath,
-    outputPath,
-  })
+  const scenes = script.scenes.map((s, i) => ({
+    caption: s.caption,
+    imagePath: path.join(scenesDir, `scene-${i + 1}.png`),
+  }));
+
+  const timestamp = Date.now();
+  const outputPath = path.join(__dirname, "..", "assets", "reels", `reel-${timestamp}.mp4`);
+  const tmpDir = path.join(__dirname, "..", "assets", "reels", `tmp-${timestamp}`);
+
+  assembleReel({ scenes, audioPath, outputPath, tmpDir })
     .then((p) => {
       fs.writeFileSync(
         path.join(__dirname, "..", "state", "latest-reel-video-path.txt"),
         path.relative(path.join(__dirname, ".."), p)
       );
+      fs.rmSync(tmpDir, { recursive: true, force: true });
       console.log("Reel video assembled:", p);
     })
     .catch((err) => {

@@ -113,7 +113,7 @@ function renderSlideSvg({ headline, subtext, slideIndex, totalSlides, palette, i
 
 async function generateCarouselImages(carousel, outputDir) {
   fs.mkdirSync(outputDir, { recursive: true });
-  const seed = Buffer.from(carousel.topic).reduce((a, c) => a + c.charCodeAt(0), 0);
+  const seed = carousel.topic.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
   const palette = pickPalette(seed);
   const total = carousel.slides.length;
   const paths = [];

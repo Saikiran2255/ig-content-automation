@@ -54,15 +54,27 @@ async function generateReelScript() {
     ? `\n\nLearned style guidance from past performance data: ${strategy.style_guidance}`
     : "";
 
-  const prompt = `You are writing a spoken narration script for a 35-45 second medical education Instagram Reel, for a doctor's personal account. Topic: "${topic}"${guidanceLine}
+  const prompt = `You are writing content for a 35-45 second medical education Instagram Reel, for a doctor's personal account. Topic: "${topic}"${guidanceLine}
 
 Write:
 1. A narration script (90-130 words) meant to be SPOKEN aloud - natural spoken rhythm, short sentences, a strong hook in the first line (first 2 seconds matter most for retention), simple language explaining the topic clearly, ending with a memorable closing line. Do not include stage directions, just the words to be spoken.
-2. 4-6 short on-screen caption phrases (max 6 words each) that will appear as text overlays synced roughly to different parts of the narration - these should be the key phrases/punchlines from the script, not the full script.
+2. 5 scenes that divide the narration into a visual sequence. For each scene provide:
+   - "caption": a short on-screen text phrase (max 6 words) - the key phrase/punchline for that moment
+   - "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a clean, professional medical illustration for this scene (e.g. anatomical diagram style, clean flat illustration, soft color palette, no text in the image, no gore, educational and reassuring tone, suitable for a general audience)
 3. A full Instagram caption (100-150 words) for the post itself, ending with 3-5 hashtags on a new line.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
-{"narration": "...", "on_screen_captions": ["...", "...", "..."], "caption": "..."}`;
+{
+  "narration": "...",
+  "scenes": [
+    {"caption": "...", "image_prompt": "..."},
+    {"caption": "...", "image_prompt": "..."},
+    {"caption": "...", "image_prompt": "..."},
+    {"caption": "...", "image_prompt": "..."},
+    {"caption": "...", "image_prompt": "..."}
+  ],
+  "caption": "..."
+}`;
 
   const msg = await anthropic.messages.create({
     model: "claude-sonnet-4-5",

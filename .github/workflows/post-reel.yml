@@ -41,6 +41,11 @@ jobs:
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
         run: node scripts/generate-voiceover.js
 
+      - name: Generate AI scene images
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/generate-scene-images.js
+
       - name: Assemble reel video
         run: node scripts/generate-reel-video.js
 
