@@ -2,8 +2,9 @@ name: Auto Post Carousel to Instagram
 
 on:
   schedule:
-    # Twice a week: Tuesday and Friday at 19:00 IST (13:30 UTC)
-    - cron: "30 13 * * 2,5"
+    # 6 days a week (Mon-Sat) at 19:00 IST (13:30 UTC) - carousels only,
+    # single-image posts retired since carousels outperform on saves/shares
+    - cron: "30 13 * * 1,2,3,4,5,6"
   workflow_dispatch: {}
 
 permissions:
