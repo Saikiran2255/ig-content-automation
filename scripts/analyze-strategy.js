@@ -5,16 +5,33 @@ const topics = require("./topics");
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Posts before this date predate the medical-education pivot and are a
+// mix of personal/lifestyle/brand content - including them in strategy
+// analysis produces confounded, misleading conclusions (comparing an
+// established personal audience against a brand-new content category).
+const PIVOT_DATE = new Date("2026-07-17T00:00:00Z");
+
 async function main() {
   const perfPath = path.join(__dirname, "..", "state", "post-performance.json");
   if (!fs.existsSync(perfPath)) {
     console.log("No performance data yet. Skipping strategy update.");
     return;
   }
-  const performance = JSON.parse(fs.readFileSync(perfPath, "utf-8"));
+  const allPerformance = JSON.parse(fs.readFileSync(perfPath, "utf-8"));
 
-  if (performance.length < 5) {
-    console.log("Not enough posts yet for a meaningful strategy update (need 5+).");
+  const performance = allPerformance.filter((p) => {
+    const ts = p.timestamp ? new Date(p.timestamp) : null;
+    return ts && ts >= PIVOT_DATE;
+  });
+
+  console.log(
+    `Filtered ${allPerformance.length} total posts down to ${performance.length} post-pivot medical posts.`
+  );
+
+  if (performance.length < 8) {
+    console.log(
+      `Only ${performance.length} medical posts so far - need at least 8 for a meaningful pattern. Skipping strategy update to avoid drawing conclusions from too little data.`
+    );
     return;
   }
 
