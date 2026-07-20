@@ -58,14 +58,19 @@ async function generateCarousel() {
 
   const prompt = `You are creating a medical education Instagram CAROUSEL post (multiple swipeable slides) for a doctor's personal account. The topic is: "${topic}"${guidanceLine}
 
+OPTIMIZE FOR SHAREABILITY, not just information. Shares (not likes) are what actually drive an account to grow, because a share puts the post in front of someone else's entire network. Before writing, pick ONE of these angles for this topic, whichever fits best:
+- MYTH-BUST: contradicts something almost everyone believes ("Everyone tells you to do X. Here's why that's wrong.")
+- RELATABLE: frames the medical fact around a universal experience people will tag a friend on ("Send this to someone who always...")
+- HIGH-STAKES USEFUL: information specific enough that someone would screenshot and save it for later, not just read once
+
 Structure it as exactly 6 slides:
-1. HOOK slide — a bold, curiosity-driving question or statement (max 10 words) that makes someone stop scrolling
+1. HOOK slide — a bold, curiosity-driving statement (max 10 words) built on the angle above. It must work as a standalone screenshot - compelling even with zero context.
 2. Slide 2-5: four content slides that build the explanation step by step, simple and clear, each with a short headline (max 8 words) and a brief supporting line (max 18 words)
-3. SUMMARY/CTA slide — a short takeaway line (max 12 words) plus "Follow for more" style closer (max 8 words)
+3. SUMMARY/CTA slide — a short, quotable takeaway line (max 12 words, written so it works as a standalone quote someone might screenshot) plus "Follow for more" style closer (max 8 words)
 
 For EACH of the 6 slides, also provide an "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a realistic, relevant background image that actually depicts what that specific slide is explaining (e.g. if the slide is about kidney stones, describe kidneys/urinary system, not an abstract shape). Style: cinematic professional medical illustration or photorealistic medical visualization, soft lighting, no text or letters in the image, consistent visual style across all 6 slides (same rendering approach, same color grading) so the carousel feels cohesive, educational and reassuring tone, no gore or disturbing imagery.
 
-Also write a full Instagram caption (150-220 words) in a warm, story-style voice that expands on the topic, ending with 3-5 relevant hashtags on a new line.
+Write a full Instagram caption (150-220 words) in a warm, story-style voice. End the caption with an explicit, natural share/save prompt (e.g. "Save this for later" or "Tag someone who needs to see this" - match it to the angle you picked), then 3-5 relevant hashtags on a new line.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
 {
