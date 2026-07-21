@@ -27,6 +27,8 @@ jobs:
         run: node scripts/generate-content.js
 
       - name: Generate image
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node scripts/generate-image.js
 
       - name: Commit generated assets to repo

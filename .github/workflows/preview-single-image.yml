@@ -1,0 +1,40 @@
+name: Preview Single Image (No Publish)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate caption + headline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-content.js
+
+      - name: Generate image
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/generate-image.js
+
+      - name: Commit preview assets to repo (no Instagram publish)
+        run: |
+          git config user.name "ig-automation-bot"
+          git config user.email "actions@github.com"
+          git add assets/ state/
+          git commit -m "Preview: single-image content for chat review [skip ci]" || echo "Nothing to commit"
+          git push

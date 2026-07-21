@@ -61,14 +61,17 @@ async function generate() {
     ? `\n\nLearned style guidance from past performance data (apply this): ${strategy.style_guidance}`
     : "";
 
-  const prompt = `You are writing a short Instagram caption for a medical education account run by a doctor (MBBS/MD). The topic is: "${topic}"${guidanceLine}
+  const prompt = `You are writing a short Instagram post for a medical education account run by a doctor (MBBS/MD). The topic is: "${topic}"${guidanceLine}
+
+OPTIMIZE FOR SHAREABILITY. Pick ONE angle: MYTH-BUST (contradicts a common belief), RELATABLE (a universal experience worth tagging a friend on), or HIGH-STAKES USEFUL (specific enough to screenshot and save).
 
 Write:
-1. A short punchy headline (max 8 words) for the image slide itself.
-2. An Instagram caption (150-220 words) in a warm, clear, story-style voice explaining the topic simply for a general audience. No jargon without explanation. End with 3-5 relevant hashtags on a new line.
+1. A short punchy headline (max 8 words) for the image - it must work as a standalone screenshot, compelling with zero context.
+2. An "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a realistic, relevant background image that depicts the topic (e.g. for a kidney stones post, describe the urinary system, not an abstract shape). Style: cinematic professional medical illustration, soft lighting, no text in the image.
+3. An Instagram caption (150-220 words) in a warm, clear, story-style voice explaining the topic simply for a general audience. No jargon without explanation. End with a natural share/save prompt matching the angle you picked, then 3-5 relevant hashtags on a new line.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
-{"headline": "...", "caption": "..."}`;
+{"headline": "...", "image_prompt": "...", "caption": "..."}`;
 
   const msg = await anthropic.messages.create({
     model: "claude-sonnet-4-5",
@@ -80,7 +83,7 @@ Respond ONLY in this exact JSON format, no markdown, no preamble:
   const cleaned = text.replace(/```json|```/g, "").trim();
   const data = JSON.parse(cleaned);
 
-  return { topic, headline: data.headline, caption: data.caption };
+  return { topic, headline: data.headline, imagePrompt: data.image_prompt, caption: data.caption };
 }
 
 module.exports = { generate };
