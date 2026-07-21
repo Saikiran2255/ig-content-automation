@@ -57,14 +57,32 @@ async function generateBackgroundImage(prompt, outputPath) {
 }
 
 async function composeImage({ backgroundPath, headline, outputPath }) {
-  const lines = wrapText(headline, 22);
-  const lineHeight = 66;
-  const startY = 950 - ((lines.length - 1) * lineHeight) / 2;
+  // Cap headline length so it never needs more than 3 lines - prevents
+  // overlap with the footer regardless of how long the AI writes it.
+  let fontSize = 54;
+  let maxChars = 22;
+  let lines = wrapText(headline, maxChars);
+  while (lines.length > 3 && fontSize > 36) {
+    fontSize -= 4;
+    maxChars += 3;
+    lines = wrapText(headline, maxChars);
+  }
+
+  const lineHeight = fontSize + 14;
+  const footerY = 1030;
+  const safeBottomMargin = 110; // minimum gap between last headline line and footer
+  const blockBottomY = footerY - safeBottomMargin;
+  const blockHeight = (lines.length - 1) * lineHeight;
+  // Anchor the block so its bottom never crosses into the footer safe zone,
+  // but keep it vertically centered when there's room.
+  const centeredStartY = 950 - blockHeight / 2;
+  const maxStartY = blockBottomY - blockHeight;
+  const startY = Math.min(centeredStartY, maxStartY);
 
   const textSvg = lines
     .map(
       (line, i) =>
-        `<text x="540" y="${startY + i * lineHeight}" font-family="Arial, sans-serif" font-size="54" font-weight="800" fill="#ffffff" text-anchor="middle">${escapeXml(
+        `<text x="540" y="${startY + i * lineHeight}" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="800" fill="#ffffff" text-anchor="middle">${escapeXml(
           line
         )}</text>`
     )

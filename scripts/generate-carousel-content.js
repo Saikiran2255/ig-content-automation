@@ -70,7 +70,13 @@ Structure it as exactly 6 slides:
 
 For EACH of the 6 slides, also provide an "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a realistic, relevant background image that actually depicts what that specific slide is explaining (e.g. if the slide is about kidney stones, describe kidneys/urinary system, not an abstract shape). Style: cinematic professional medical illustration or photorealistic medical visualization, soft lighting, no text or letters in the image, consistent visual style across all 6 slides (same rendering approach, same color grading) so the carousel feels cohesive, educational and reassuring tone, no gore or disturbing imagery.
 
-Write a full Instagram caption (150-220 words) in a warm, story-style voice. End the caption with an explicit, natural share/save prompt (e.g. "Save this for later" or "Tag someone who needs to see this" - match it to the angle you picked), then 3-5 relevant hashtags on a new line.
+Write a full Instagram caption (150-220 words) in a warm, story-style voice. End the caption with an explicit, natural share/save prompt (e.g. "Save this for later" or "Tag someone who needs to see this" - match it to the angle you picked), then a hashtag block on new lines.
+
+HASHTAG STRATEGY (critical for reach) - use exactly 12 hashtags, mixed across three tiers:
+- 3 BROAD/high-volume tags (millions of posts) for maximum discovery pool, e.g. #health #wellness #medicine
+- 6 MID-SIZE niche tags (tens of thousands to low millions) specific to the topic, e.g. #guthealth #sleepscience #kidneyhealth - these are where most real discovery happens since competition is lower
+- 3 SPECIFIC/long-tail tags directly matching the exact topic, e.g. #kidneystonesymptoms - low competition, but reaches people actively searching this exact thing
+Do not repeat generic tags across posts every time - vary them based on the specific topic.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
 {

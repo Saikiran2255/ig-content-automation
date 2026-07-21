@@ -68,7 +68,13 @@ OPTIMIZE FOR SHAREABILITY. Pick ONE angle: MYTH-BUST (contradicts a common belie
 Write:
 1. A short punchy headline (max 8 words) for the image - it must work as a standalone screenshot, compelling with zero context.
 2. An "image_prompt": a detailed visual description (20-40 words) for an AI image generator to create a realistic, relevant background image that depicts the topic (e.g. for a kidney stones post, describe the urinary system, not an abstract shape). Style: cinematic professional medical illustration, soft lighting, no text in the image.
-3. An Instagram caption (150-220 words) in a warm, clear, story-style voice explaining the topic simply for a general audience. No jargon without explanation. End with a natural share/save prompt matching the angle you picked, then 3-5 relevant hashtags on a new line.
+3. An Instagram caption (150-220 words) in a warm, clear, story-style voice explaining the topic simply for a general audience. No jargon without explanation. End with a natural share/save prompt matching the angle you picked, then a hashtag block on new lines.
+
+HASHTAG STRATEGY (critical for reach) - use exactly 12 hashtags, mixed across three tiers:
+- 3 BROAD/high-volume tags (millions of posts) for maximum discovery pool, e.g. #health #wellness #medicine
+- 6 MID-SIZE niche tags (tens of thousands to low millions) specific to the topic, e.g. #guthealth #sleepscience #kidneyhealth - these are where most real discovery happens since competition is lower
+- 3 SPECIFIC/long-tail tags directly matching the exact topic, e.g. #kidneystonesymptoms - low competition, but reaches people actively searching this exact thing
+Do not repeat generic tags across posts every time - vary them based on the specific topic.
 
 Respond ONLY in this exact JSON format, no markdown, no preamble:
 {"headline": "...", "image_prompt": "...", "caption": "..."}`;
