@@ -27,7 +27,8 @@ function wrapText(text, maxCharsPerLine) {
   return lines;
 }
 
-async function generateBackgroundImage(prompt, outputPath) {
+async function generateBackgroundImage(prompt, outputPath, attempt = 1) {
+  const maxAttempts = 3;
   const fullPrompt = `${prompt}. Style: cinematic professional medical illustration, soft moody lighting, square composition, no text or letters anywhere in the image, educational and reassuring tone, high production quality, no gore or disturbing imagery.`;
 
   const res = await fetch("https://api.openai.com/v1/images/generations", {
@@ -47,7 +48,16 @@ async function generateBackgroundImage(prompt, outputPath) {
 
   if (!res.ok) {
     const errText = await res.text();
-    throw new Error(`OpenAI image generation failed (${res.status}): ${errText}`);
+    const isTransient = res.status >= 500 || res.status === 429;
+    if (isTransient && attempt < maxAttempts) {
+      const waitMs = attempt * 5000;
+      console.warn(
+        `Transient error (${res.status}) on attempt ${attempt}, retrying in ${waitMs}ms...`
+      );
+      await new Promise((r) => setTimeout(r, waitMs));
+      return generateBackgroundImage(prompt, outputPath, attempt + 1);
+    }
+    throw new Error(`OpenAI image generation failed (${res.status}): ${errText.slice(0, 300)}`);
   }
 
   const data = await res.json();
