@@ -1,0 +1,77 @@
+name: Publish External Image to Instagram
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_url:
+        description: "Public URL of the image to publish (e.g. Canva export URL)"
+        required: true
+      caption:
+        description: "Caption text for the post"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install node-fetch@2
+
+      - name: Publish to Instagram
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IMAGE_URL: ${{ github.event.inputs.image_url }}
+          CAPTION: ${{ github.event.inputs.caption }}
+        run: |
+          node -e "
+          const fetch = require('node-fetch');
+          const IG_USER_ID = process.env.IG_USER_ID;
+          const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
+          const GRAPH_BASE = 'https://graph.instagram.com';
+
+          async function main() {
+            const params1 = new URLSearchParams({
+              image_url: process.env.IMAGE_URL,
+              caption: process.env.CAPTION,
+              access_token: IG_ACCESS_TOKEN,
+            });
+            const res1 = await fetch(\`\${GRAPH_BASE}/\${IG_USER_ID}/media?\${params1.toString()}\`, { method: 'POST' });
+            const data1 = await res1.json();
+            if (!res1.ok || data1.error) throw new Error('Container creation failed: ' + JSON.stringify(data1));
+            console.log('Container created:', data1.id);
+
+            let ready = false;
+            for (let i = 0; i < 10; i++) {
+              const res = await fetch(\`\${GRAPH_BASE}/\${data1.id}?fields=status_code&access_token=\${IG_ACCESS_TOKEN}\`);
+              const d = await res.json();
+              console.log('Status:', d.status_code);
+              if (d.status_code === 'FINISHED') { ready = true; break; }
+              if (d.status_code === 'ERROR') throw new Error('Processing failed: ' + JSON.stringify(d));
+              await new Promise(r => setTimeout(r, 3000));
+            }
+            if (!ready) throw new Error('Container not ready in time.');
+
+            const params2 = new URLSearchParams({
+              creation_id: data1.id,
+              access_token: IG_ACCESS_TOKEN,
+            });
+            const res2 = await fetch(\`\${GRAPH_BASE}/\${IG_USER_ID}/media_publish?\${params2.toString()}\`, { method: 'POST' });
+            const data2 = await res2.json();
+            if (!res2.ok || data2.error) throw new Error('Publish failed: ' + JSON.stringify(data2));
+            console.log('Published successfully. Media ID:', data2.id);
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          "
