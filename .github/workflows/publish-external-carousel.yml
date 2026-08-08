@@ -1,0 +1,113 @@
+name: Publish External Carousel to Instagram
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_urls:
+        description: "Image URLs separated by | (pipe character)"
+        required: true
+      caption:
+        description: "Caption text for the post"
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install node-fetch@2
+
+      - name: Publish carousel to Instagram
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IMAGE_URLS: ${{ github.event.inputs.image_urls }}
+          CAPTION: ${{ github.event.inputs.caption }}
+        run: |
+          node -e "
+          const fetch = require('node-fetch');
+          const IG_USER_ID = process.env.IG_USER_ID;
+          const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
+          const GRAPH_BASE = 'https://graph.instagram.com';
+          const imageUrls = process.env.IMAGE_URLS.split('|').map(s => s.trim()).filter(Boolean);
+
+          async function createChild(url) {
+            const params = new URLSearchParams({
+              image_url: url,
+              is_carousel_item: 'true',
+              access_token: IG_ACCESS_TOKEN,
+            });
+            const res = await fetch(\`\${GRAPH_BASE}/\${IG_USER_ID}/media?\${params.toString()}\`, { method: 'POST' });
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error('Child container failed: ' + JSON.stringify(data));
+            return data.id;
+          }
+
+          async function main() {
+            console.log(\`Creating \${imageUrls.length} child containers...\`);
+            const childIds = [];
+            for (const url of imageUrls) {
+              const id = await createChild(url);
+              console.log('Child created:', id);
+              childIds.push(id);
+              await new Promise(r => setTimeout(r, 1000));
+            }
+
+            const params = new URLSearchParams({
+              media_type: 'CAROUSEL',
+              children: childIds.join(','),
+              caption: process.env.CAPTION,
+              access_token: IG_ACCESS_TOKEN,
+            });
+            const res = await fetch(\`\${GRAPH_BASE}/\${IG_USER_ID}/media?\${params.toString()}\`, { method: 'POST' });
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error('Carousel container failed: ' + JSON.stringify(data));
+            console.log('Carousel container created:', data.id);
+
+            let ready = false;
+            for (let i = 0; i < 15; i++) {
+              const r = await fetch(\`\${GRAPH_BASE}/\${data.id}?fields=status_code&access_token=\${IG_ACCESS_TOKEN}\`);
+              const d = await r.json();
+              console.log('Status:', d.status_code);
+              if (d.status_code === 'FINISHED') { ready = true; break; }
+              if (d.status_code === 'ERROR') throw new Error('Processing failed: ' + JSON.stringify(d));
+              await new Promise(r => setTimeout(r, 3000));
+            }
+            if (!ready) throw new Error('Container not ready in time.');
+
+            const pubParams = new URLSearchParams({
+              creation_id: data.id,
+              access_token: IG_ACCESS_TOKEN,
+            });
+            const pubRes = await fetch(\`\${GRAPH_BASE}/\${IG_USER_ID}/media_publish?\${pubParams.toString()}\`, { method: 'POST' });
+            const pubData = await pubRes.json();
+            if (!pubRes.ok || pubData.error) throw new Error('Publish failed: ' + JSON.stringify(pubData));
+            console.log('Carousel published successfully. Media ID:', pubData.id);
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          "
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Carousel publish failed - ${new Date().toISOString().slice(0,10)}`,
+              body: `Check the run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            })
