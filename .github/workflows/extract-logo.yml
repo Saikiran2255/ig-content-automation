@@ -1,0 +1,85 @@
+name: Extract Logo Crop
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_url:
+        description: "Canva export URL of the full design"
+        required: true
+      left_frac:
+        description: "Left crop position as fraction of width (0-1)"
+        required: true
+      top_frac:
+        description: "Top crop position as fraction of height (0-1)"
+        required: true
+      width_frac:
+        description: "Crop width as fraction of image width (0-1)"
+        required: true
+      height_frac:
+        description: "Crop height as fraction of image height (0-1)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install sharp node-fetch@2
+
+      - name: Download, crop, and save logo
+        env:
+          IMAGE_URL: ${{ github.event.inputs.image_url }}
+          LEFT_FRAC: ${{ github.event.inputs.left_frac }}
+          TOP_FRAC: ${{ github.event.inputs.top_frac }}
+          WIDTH_FRAC: ${{ github.event.inputs.width_frac }}
+          HEIGHT_FRAC: ${{ github.event.inputs.height_frac }}
+        run: |
+          mkdir -p assets/logo
+          node -e "
+          const sharp = require('sharp');
+          const fetch = require('node-fetch');
+          const fs = require('fs');
+
+          async function main() {
+            const res = await fetch(process.env.IMAGE_URL);
+            const buffer = Buffer.from(await res.arrayBuffer());
+            fs.writeFileSync('assets/logo/full.png', buffer);
+
+            const metadata = await sharp('assets/logo/full.png').metadata();
+            console.log('Full image size:', metadata.width, metadata.height);
+
+            const left = Math.round(parseFloat(process.env.LEFT_FRAC) * metadata.width);
+            const top = Math.round(parseFloat(process.env.TOP_FRAC) * metadata.height);
+            const width = Math.round(parseFloat(process.env.WIDTH_FRAC) * metadata.width);
+            const height = Math.round(parseFloat(process.env.HEIGHT_FRAC) * metadata.height);
+            console.log('Crop box:', { left, top, width, height });
+
+            await sharp('assets/logo/full.png')
+              .extract({ left, top, width, height })
+              .png()
+              .toFile('assets/logo/badge-logo.png');
+
+            console.log('Logo saved.');
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          "
+
+      - name: Commit logo
+        run: |
+          git config user.name "ig-automation-bot"
+          git config user.email "actions@github.com"
+          git add assets/logo/badge-logo.png
+          git commit -m "Extract badge logo crop [skip ci]" || echo "Nothing to commit"
+          git push
