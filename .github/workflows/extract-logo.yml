@@ -67,7 +67,7 @@ jobs:
 
             await sharp('assets/logo/full.png')
               .extract({ left, top, width, height })
-              .resize(width * 4, height * 4, { kernel: 'lanczos3' })
+              .resize(width * 2, height * 2, { kernel: 'lanczos3' })
               .png()
               .toFile('assets/logo/badge-logo.png');
 
