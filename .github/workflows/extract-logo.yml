@@ -67,10 +67,11 @@ jobs:
 
             await sharp('assets/logo/full.png')
               .extract({ left, top, width, height })
+              .resize(width * 4, height * 4, { kernel: 'lanczos3' })
               .png()
               .toFile('assets/logo/badge-logo.png');
 
-            console.log('Logo saved.');
+            console.log('Logo saved (4x upscaled for HD).');
           }
 
           main().catch(err => { console.error(err); process.exit(1); });
